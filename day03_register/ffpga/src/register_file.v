@@ -12,7 +12,8 @@ module register_file (
     input  wire [1:0] read_addr_b,
 
     output wire [7:0] read_data_a,
-    output wire [7:0] read_data_b
+    output wire [7:0] read_data_b,
+    output wire [7:0] debug_r2
 );
 
 wire r0_enable;
@@ -30,6 +31,7 @@ wire [7:0] r0_data;
 wire [7:0] r1_data;
 wire [7:0] r2_data;
 wire [7:0] r3_data;
+
 
 register8 r0 (
     .clk   (clk),
@@ -75,5 +77,7 @@ assign read_data_b =
     (read_addr_b == 2'b01) ? r1_data :
     (read_addr_b == 2'b10) ? r2_data :
                              r3_data;
+                             
+assign debug_r2 = r2_data;
 
 endmodule

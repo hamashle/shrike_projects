@@ -1,5 +1,3 @@
-// Custom Module
-
 module instruction_fetch (
     input wire clk,
     input wire reset,
@@ -9,7 +7,8 @@ module instruction_fetch (
 
     output wire [3:0] opcode,
     output wire [1:0] rd,
-    output wire [1:0] rs,
+    output wire [1:0] rs1,
+    output wire [1:0] rs2,
     output wire [7:0] immediate
 );
 
@@ -30,7 +29,8 @@ instruction_decoder decoder_unit (
     .instruction(instruction),
     .opcode     (opcode),
     .rd         (rd),
-    .rs         (rs),
+    .rs1        (rs1),
+    .rs2        (rs2),
     .immediate  (immediate)
 );
 
