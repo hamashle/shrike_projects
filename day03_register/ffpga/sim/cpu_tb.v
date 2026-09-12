@@ -29,9 +29,9 @@ module cpu_tb;
         reset = 0;
 
         // ROMの命令を順番に実行する時間を待つ
-        #40;
+        #60;
 
-        $display("R2 = %d", debug_r2);
+		$display("R2 = %d", debug_r2);
 
         $finish;
     end

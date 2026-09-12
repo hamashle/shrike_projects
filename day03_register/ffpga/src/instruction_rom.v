@@ -10,20 +10,17 @@ always @(*) begin
 
         // LOADI R0, 10
         // opcode=0001, rd=00, unused=00, immediate=00001010
-        8'd0: instruction = 16'b0001_00_00_00001010;
+       8'd0: instruction = 16'b0110_00_00_00000010; // JUMP 2
 
-        // LOADI R1, 20
-        // opcode=0001, rd=01, unused=00, immediate=00010100
-        8'd1: instruction = 16'b0001_01_00_00010100;
+	   8'd1: instruction = 16'b0001_00_00_01100011; // LOADI R0, 99（実行されない）
 
-        // ADD R2, R0, R1
-        // opcode=0010, rd=10, rs1=00, rs2=01, unused=000000
-        8'd2: instruction = 16'b0010_10_00_01_000000;
+	   8'd2: instruction = 16'b0001_00_00_00001010; // LOADI R0, 10
 
-        // NOP
-        8'd3: instruction = 16'b0000_0000_0000_0000;
+       8'd3: instruction = 16'b0001_01_00_00010100; // LOADI R1, 20
 
-        default: instruction = 16'd0;
+       8'd4: instruction = 16'b0010_10_00_01_000000; // ADD R2, R0, R1
+
+	   default: instruction = 16'd0;
 
     endcase
 end
