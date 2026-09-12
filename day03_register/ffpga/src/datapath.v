@@ -16,7 +16,8 @@ module datapath (
 
     output wire [7:0] alu_result,
     output wire       carry_out,
-    output wire [7:0] debug_read_data_a
+    output wire [7:0] debug_read_data_a,
+    output wire [7:0] debug_r2
 );
 
     wire [7:0] read_data_a;
@@ -40,7 +41,8 @@ module datapath (
         .read_addr_b(read_addr_b),
 
         .read_data_a(read_data_a),
-        .read_data_b(read_data_b)
+        .read_data_b(read_data_b),
+        .debug_r2(debug_r2)
     );
 
     alu8 alu (
