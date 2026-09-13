@@ -5,7 +5,8 @@ module control_unit (
 
     output reg        write_enable,
     output reg  [1:0] alu_op,
-    output reg        use_immediate
+    output reg        use_immediate,
+    output reg        pc_load
 );
 
 always @(*) begin
@@ -14,6 +15,7 @@ always @(*) begin
     write_enable  = 1'b0;
     alu_op        = 2'b00;
     use_immediate = 1'b0;
+    pc_load = 1'b0;
 
     case (opcode)
 
@@ -49,6 +51,10 @@ always @(*) begin
         	    alu_op = 2'b10;
         	    use_immediate = 1'b0;
         end
+        
+        4'b0110: begin // JUMP
+    			pc_load = 1'b1;
+		end
     endcase
 
 end

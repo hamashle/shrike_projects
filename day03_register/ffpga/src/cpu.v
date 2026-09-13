@@ -22,6 +22,8 @@ wire [7:0] immediate;
 
 wire [15:0] instruction;
 
+wire pc_load;
+
 control_unit cu (
     .opcode(opcode_decoded),
     .write_enable(write_enable),
@@ -32,8 +34,8 @@ control_unit cu (
 program_counter pc_unit (
     .clk(clk),
     .reset(reset),
-    .load(1'b0),
-    .load_addr(8'd0),
+    .load(pc_load),
+	.load_addr(immediate),
     .pc(pc)
 );
 
