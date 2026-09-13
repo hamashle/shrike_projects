@@ -17,7 +17,8 @@ module datapath (
     output wire [7:0] alu_result,
     output wire       carry_out,
     output wire [7:0] debug_read_data_a,
-    output wire [7:0] debug_r2
+    output wire [7:0] debug_r2,
+    output wire zero_flag
 );
 
     wire [7:0] read_data_a;
@@ -50,7 +51,8 @@ module datapath (
         .b(read_data_b),
         .op(alu_op),
         .result(alu_result),
-        .carry_out(carry_out)
+        .carry_out(carry_out),
+        .zero_flag(zero_flag)
     );
 
 endmodule

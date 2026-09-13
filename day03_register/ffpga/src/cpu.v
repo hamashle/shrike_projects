@@ -24,17 +24,29 @@ wire [15:0] instruction;
 
 wire pc_load;
 
+wire zero_flag;
+reg  zero_flag_reg;
+
+wire flag_write_enable;
+
+wire jump_if_zero;
+wire should_jump;
+
+assign should_jump =
+    pc_load | (jump_if_zero & zero_flag_reg);
+
 control_unit cu (
     .opcode(opcode_decoded),
     .write_enable(write_enable),
     .alu_op(alu_op),
-    .use_immediate(use_immediate)
+    .use_immediate(use_immediate),
+    .flag_write_enable(flag_write_enable)
 );
 
 program_counter pc_unit (
     .clk(clk),
     .reset(reset),
-    .load(pc_load),
+    .load(should_jump),
 	.load_addr(immediate),
     .pc(pc)
 );
@@ -56,7 +68,8 @@ datapath dp (
 
     .alu_result(alu_result),
     .carry_out(carry_out),
-    .debug_r2(debug_r2)
+    .debug_r2(debug_r2),
+    .zero_flag(zero_flag)
 );
 
 instruction_rom rom (
@@ -72,4 +85,14 @@ instruction_decoder decoder (
     .rs2(rs2),
     .immediate(immediate)
 );
+
+always @(posedge clk) begin
+    if (reset) begin
+        zero_flag_reg <= 1'b0;
+    end
+    else if (flag_write_enable) begin
+        zero_flag_reg <= zero_flag;
+    end
+end
+
 endmodule

@@ -6,7 +6,9 @@ module control_unit (
     output reg        write_enable,
     output reg  [1:0] alu_op,
     output reg        use_immediate,
-    output reg        pc_load
+    output reg        pc_load,
+    output reg flag_write_enable,
+    output reg jump_if_zero
 );
 
 always @(*) begin
@@ -16,6 +18,8 @@ always @(*) begin
     alu_op        = 2'b00;
     use_immediate = 1'b0;
     pc_load = 1'b0;
+    flag_write_enable = 1'b0;
+    jump_if_zero = 1'b0;
 
     case (opcode)
 
@@ -32,28 +36,35 @@ always @(*) begin
             write_enable = 1'b1;
             alu_op = 2'b11;
             use_immediate = 1'b0;
+            flag_write_enable = 1'b1;
         end
 
         4'b0011: begin // AND
         	    write_enable = 1'b1;
         	    alu_op = 2'b00;
         	    use_immediate = 1'b0;
+        	    flag_write_enable = 1'b1;
         end
         
          4'b0100: begin // OR
         	    write_enable = 1'b1;
         	    alu_op = 2'b01;
         	    use_immediate = 1'b0;
+        	    flag_write_enable = 1'b1;
         end
         
          4'b0101: begin // XOR
         	    write_enable = 1'b1;
         	    alu_op = 2'b10;
         	    use_immediate = 1'b0;
+        	    flag_write_enable = 1'b1;
         end
         
         4'b0110: begin // JUMP
     			pc_load = 1'b1;
+		end
+		4'b0111: begin // JZ
+    			jump_if_zero = 1'b1;
 		end
     endcase
 
