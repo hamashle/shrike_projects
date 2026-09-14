@@ -7,7 +7,8 @@ module alu8 (
     input  wire [7:0] b,
     input  wire [1:0] op,
     output wire [7:0] result,
-    output wire       carry_out
+    output wire       carry_out,
+    output wire       zero_flag
 );
 
 wire [7:0] and_result;
@@ -19,6 +20,7 @@ wire       add_carry;
 assign and_result = a & b;
 assign or_result  = a | b;
 assign xor_result = a ^ b;
+assign zero_flag = (result == 8'd0);
 
 adder8 adder (
     .a   (a),
@@ -36,6 +38,6 @@ assign result =
 
 assign carry_out =
     (op == 2'b11) ? add_carry : 1'b0;
-
+assign zero_flag = (result == 8'd0);
 endmodule
 
