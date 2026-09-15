@@ -9,9 +9,14 @@ module cpu (
     output wire [7:0] debug_r2
 );
 
+
+wire [7:0] memory_data;
+wire [7:0] memory_write_data;
+
 wire       write_enable;
 wire [2:0] alu_op;
-wire       use_immediate;
+wire [1:0] write_select;
+wire       mem_write_enable;
 wire [7:0] pc;
 
 wire [3:0] opcode_decoded;
@@ -32,6 +37,11 @@ wire flag_write_enable;
 wire jump_if_zero;
 wire should_jump;
 
+wire [1:0] read_addr_a_selected;
+
+assign read_addr_a_selected =
+    (opcode_decoded == 4'b1010) ? rd : rs1;
+
 assign should_jump =
     pc_load | (jump_if_zero & zero_flag_reg);
 
@@ -39,8 +49,11 @@ control_unit cu (
     .opcode(opcode_decoded),
     .write_enable(write_enable),
     .alu_op(alu_op),
-    .use_immediate(use_immediate),
-    .flag_write_enable(flag_write_enable)
+    .write_select(write_select),
+    .pc_load(pc_load),
+    .flag_write_enable(flag_write_enable),
+    .jump_if_zero(jump_if_zero),
+    .mem_write_enable(mem_write_enable)
 );
 
 program_counter pc_unit (
@@ -58,18 +71,22 @@ datapath dp (
     .write_enable(write_enable),
 
     .write_addr(rd),
-    .read_addr_a(rs1),
+    .read_addr_a(read_addr_a_selected),
     .read_addr_b(rs2),
 
     .alu_op(alu_op),
 
     .external_data(immediate),
-    .write_select(use_immediate),
+    .memory_data(memory_data),
+    .write_select(write_select),
 
     .alu_result(alu_result),
     .carry_out(carry_out),
-    .debug_r2(debug_r2),
-    .zero_flag(zero_flag)
+    .zero_flag(zero_flag),
+
+    .memory_write_data(memory_write_data),
+
+    .debug_r2(debug_r2)
 );
 
 instruction_rom rom (
@@ -84,6 +101,14 @@ instruction_decoder decoder (
     .rs1(rs1),
     .rs2(rs2),
     .immediate(immediate)
+);
+
+data_memory data_mem (
+    .clk(clk),
+    .write_enable(mem_write_enable),
+    .address(immediate),
+    .write_data(memory_write_data),
+    .read_data(memory_data)
 );
 
 always @(posedge clk) begin
