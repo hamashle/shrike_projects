@@ -10,7 +10,7 @@ module cpu (
 );
 
 wire       write_enable;
-wire [1:0] alu_op;
+wire [2:0] alu_op;
 wire       use_immediate;
 wire [7:0] pc;
 

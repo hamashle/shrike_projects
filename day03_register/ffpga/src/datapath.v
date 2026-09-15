@@ -9,7 +9,7 @@ module datapath (
     input  wire [1:0] read_addr_a,
     input  wire [1:0] read_addr_b,
 
-    input  wire [1:0] alu_op,
+    input  wire [2:0] alu_op,
 
     input  wire [7:0] external_data,
     input  wire       write_select,
