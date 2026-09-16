@@ -36,8 +36,6 @@ module datapath (
     				(write_select == 2'b01) ? external_data :
     				(write_select == 2'b10) ? memory_data :
                               				  8'd0;
-                              				  
-    assign memory_write_data = read_data_a;                      	    				  	
     					
     assign debug_read_data_a = read_data_a;
 
