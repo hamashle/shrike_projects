@@ -6,12 +6,14 @@ module cpu (
 
     output wire [7:0] alu_result,
     output wire       carry_out,
-    output wire [7:0] debug_r2
+    output wire [7:0] debug_r2,
+    output wire [7:0] debug_io
 );
 
 
 wire [7:0] memory_data;
 wire [7:0] memory_write_data;
+wire [7:0] io_data;
 
 wire       write_enable;
 wire [2:0] alu_op;
@@ -39,11 +41,28 @@ wire should_jump;
 
 wire [1:0] read_addr_a_selected;
 
+wire io_selected;
+
+wire data_mem_write_enable;
+
+wire io_write_enable;
+
+assign io_selected = (immediate == 8'hFF);
+
+assign data_mem_write_enable =
+    mem_write_enable & ~io_selected;
+
 assign read_addr_a_selected =
     (opcode_decoded == 4'b1010) ? rd : rs1;
 
 assign should_jump =
     pc_load | (jump_if_zero & zero_flag_reg);
+    
+
+assign io_write_enable =
+    mem_write_enable & io_selected;
+    
+assign debug_io = io_data;
 
 control_unit cu (
     .opcode(opcode_decoded),
@@ -105,10 +124,17 @@ instruction_decoder decoder (
 
 data_memory data_mem (
     .clk(clk),
-    .write_enable(mem_write_enable),
+    .write_enable(data_mem_write_enable),
     .address(immediate),
     .write_data(memory_write_data),
     .read_data(memory_data)
+);
+
+io_output io_out (
+    .clk(clk),
+    .write_enable(io_write_enable),
+    .write_data(memory_write_data),
+    .io_data(io_data)
 );
 
 always @(posedge clk) begin

@@ -9,6 +9,7 @@ module cpu_tb;
     wire carry_out;
     wire [7:0] debug_read_data_a;
     wire [7:0] debug_r2;
+    wire [7:0] debug_io;
 
     cpu dut (
         .clk(clk),
@@ -16,7 +17,8 @@ module cpu_tb;
 
         .alu_result(alu_result),
         .carry_out(carry_out),
-        .debug_r2(debug_r2)
+        .debug_r2(debug_r2),
+        .debug_io(debug_io)
     );
 
     always #5 clk = ~clk;
@@ -30,7 +32,7 @@ module cpu_tb;
 
         // ROMの命令を順番に実行する時間を待つ
         #100;
-		$display("R2 = %d", debug_r2);	
+		$display("IO = %d", debug_io);
 
         $finish;
     end

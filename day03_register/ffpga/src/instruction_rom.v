@@ -7,21 +7,10 @@ module instruction_rom (
 
 always @(*) begin
     case (addr)
-
-    	// LOADI R0, 42
-    	8'd0: instruction = 16'b0001_00_00_00101010;
-
-    	// STORE R0, [20]
-    	8'd1: instruction = 16'b1010_00_00_00010100;
-
-    	// LOAD R2, [20]
-    	8'd2: instruction = 16'b1001_10_00_00010100;
-
-    	// NOP
-    	8'd3: instruction = 16'b0000_0000_0000_0000;
-
+    	8'd0: instruction = 16'b0001_00_00_01001000; // LOADI R0,72 ('H')
+    	8'd1: instruction = 16'b1010_00_00_11111111; // STORE R0,[255]
+    	8'd2: instruction = 16'b0000_0000_0000_0000; // NOP
     	default: instruction = 16'd0;
-
 	endcase
 end
 
