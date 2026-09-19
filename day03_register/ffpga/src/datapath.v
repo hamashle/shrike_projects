@@ -20,12 +20,15 @@ module datapath (
     output wire [7:0] debug_read_data_a,
     output wire [7:0] debug_r2,
     output wire zero_flag,
-    output wire [7:0] memory_write_data
+    output wire [7:0] memory_write_data,
+    output wire [7:0] register_data_a
 );
 
     wire [7:0] read_data_a;
     wire [7:0] read_data_b;
     wire [7:0] write_data;
+    
+    assign register_data_a = read_data_a;
 
     // write_select
 	// 00: ALU result

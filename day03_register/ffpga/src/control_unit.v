@@ -81,6 +81,10 @@ always @(*) begin
 		4'b1010: begin // STORE
     			mem_write_enable = 1'b1;
 		end
+		4'b1011: begin // LOADR
+    			write_enable = 1'b1;
+    			write_select = 2'b10;
+		end
     endcase
 
 end

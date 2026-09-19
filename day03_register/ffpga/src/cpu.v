@@ -54,6 +54,9 @@ wire [7:0] uart_status;
 
 wire [7:0] load_data;
 
+wire [7:0] memory_address;
+wire [7:0] register_data_a;
+
 assign load_data =
     (immediate == 8'hFE) ? uart_status : memory_data;
 
@@ -75,6 +78,9 @@ assign io_write_enable =
     mem_write_enable & io_selected;
     
 assign debug_io = io_data;
+
+assign memory_address =
+    (opcode_decoded == 4'b1011) ? register_data_a : immediate;
 
 control_unit cu (
     .opcode(opcode_decoded),
@@ -116,6 +122,7 @@ datapath dp (
     .zero_flag(zero_flag),
 
     .memory_write_data(memory_write_data),
+    .register_data_a(register_data_a),
 
     .debug_r2(debug_r2)
 );
@@ -137,7 +144,7 @@ instruction_decoder decoder (
 data_memory data_mem (
     .clk(clk),
     .write_enable(data_mem_write_enable),
-    .address(immediate),
+    .address(memory_address),
     .write_data(memory_write_data),
     .read_data(memory_data)
 );

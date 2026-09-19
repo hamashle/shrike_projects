@@ -21,7 +21,6 @@ module cpu_tb;
         .debug_io    (debug_io)
     );
 
-    // Clock
     always #5 clk = ~clk;
 
     initial begin
@@ -31,84 +30,51 @@ module cpu_tb;
         #10;
         reset = 0;
 
-        // ========================================
-        // 1文字目: 'H'
-        // ========================================
-
-        // Start bit の立ち下がりを待つ
+        // =========================
+        // 1文字目: H
+        // =========================
         @(negedge uart_tx_out);
 
-        // Start bit の中央
         #2170;
         $display("1st Start  = %b", uart_tx_out);
 
-        #4340;
-        $display("1st Data 0 = %b", uart_tx_out);
+        #4340; $display("1st Data 0 = %b", uart_tx_out);
+        #4340; $display("1st Data 1 = %b", uart_tx_out);
+        #4340; $display("1st Data 2 = %b", uart_tx_out);
+        #4340; $display("1st Data 3 = %b", uart_tx_out);
+        #4340; $display("1st Data 4 = %b", uart_tx_out);
+        #4340; $display("1st Data 5 = %b", uart_tx_out);
+        #4340; $display("1st Data 6 = %b", uart_tx_out);
+        #4340; $display("1st Data 7 = %b", uart_tx_out);
+        #4340; $display("1st Stop   = %b", uart_tx_out);
 
-        #4340;
-        $display("1st Data 1 = %b", uart_tx_out);
-
-        #4340;
-        $display("1st Data 2 = %b", uart_tx_out);
-
-        #4340;
-        $display("1st Data 3 = %b", uart_tx_out);
-
-        #4340;
-        $display("1st Data 4 = %b", uart_tx_out);
-
-        #4340;
-        $display("1st Data 5 = %b", uart_tx_out);
-
-        #4340;
-        $display("1st Data 6 = %b", uart_tx_out);
-
-        #4340;
-        $display("1st Data 7 = %b", uart_tx_out);
-
-        #4340;
-        $display("1st Stop   = %b", uart_tx_out);
-
-
-        // ========================================
-        // 2文字目: 'i'
-        // ========================================
-
-        // 次のStart bitの立ち下がりを待つ
+        // =========================
+        // 2文字目: i
+        // =========================
         @(negedge uart_tx_out);
 
-        // Start bit の中央
         #2170;
         $display("2nd Start  = %b", uart_tx_out);
 
-        #4340;
-        $display("2nd Data 0 = %b", uart_tx_out);
+        #4340; $display("2nd Data 0 = %b", uart_tx_out);
+        #4340; $display("2nd Data 1 = %b", uart_tx_out);
+        #4340; $display("2nd Data 2 = %b", uart_tx_out);
+        #4340; $display("2nd Data 3 = %b", uart_tx_out);
+        #4340; $display("2nd Data 4 = %b", uart_tx_out);
+        #4340; $display("2nd Data 5 = %b", uart_tx_out);
+        #4340; $display("2nd Data 6 = %b", uart_tx_out);
+        #4340; $display("2nd Data 7 = %b", uart_tx_out);
+        #4340; $display("2nd Stop   = %b", uart_tx_out);
 
-        #4340;
-        $display("2nd Data 1 = %b", uart_tx_out);
+        // UART送信完了とCPUの終端処理を少し待つ
+        #10000;
 
-        #4340;
-        $display("2nd Data 2 = %b", uart_tx_out);
+        $display("------------------------");
+        $display("Final PC = %d", dut.pc);
+        $display("Final R0 = %d", dut.dp.rf.r0_data);
+        $display("Final R3 = %d", dut.dp.rf.r3_data);
+        $display("------------------------");
 
-        #4340;
-        $display("2nd Data 3 = %b", uart_tx_out);
-
-        #4340;
-        $display("2nd Data 4 = %b", uart_tx_out);
-
-        #4340;
-        $display("2nd Data 5 = %b", uart_tx_out);
-
-        #4340;
-        $display("2nd Data 6 = %b", uart_tx_out);
-
-        #4340;
-        $display("2nd Data 7 = %b", uart_tx_out);
-
-        #4340;
-        $display("2nd Stop   = %b", uart_tx_out);
-
-        #1000;
         $finish;
     end
 

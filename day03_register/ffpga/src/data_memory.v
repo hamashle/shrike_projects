@@ -18,4 +18,10 @@ end
 
 assign read_data = memory[address];
 
+initial begin
+    memory[0] = 8'h48; // 'H'
+    memory[1] = 8'h69; // 'i'
+    memory[2] = 8'h00; // '\0'
+end
+
 endmodule
