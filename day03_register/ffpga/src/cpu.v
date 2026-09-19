@@ -6,6 +6,7 @@ module cpu (
 
     output wire [7:0] alu_result,
     output wire       carry_out,
+    output wire uart_tx_out,
     output wire [7:0] debug_r2,
     output wire [7:0] debug_io
 );
@@ -46,6 +47,17 @@ wire io_selected;
 wire data_mem_write_enable;
 
 wire io_write_enable;
+
+wire uart_busy;
+
+wire [7:0] uart_status;
+
+wire [7:0] load_data;
+
+assign load_data =
+    (immediate == 8'hFE) ? uart_status : memory_data;
+
+assign uart_status = {7'b0000000, uart_busy};
 
 assign io_selected = (immediate == 8'hFF);
 
@@ -96,7 +108,7 @@ datapath dp (
     .alu_op(alu_op),
 
     .external_data(immediate),
-    .memory_data(memory_data),
+    .memory_data(load_data),
     .write_select(write_select),
 
     .alu_result(alu_result),
@@ -130,11 +142,13 @@ data_memory data_mem (
     .read_data(memory_data)
 );
 
-io_output io_out (
-    .clk(clk),
-    .write_enable(io_write_enable),
-    .write_data(memory_write_data),
-    .io_data(io_data)
+uart_tx uart (
+    .clk   (clk),
+    .reset (reset),
+    .start (io_write_enable),
+    .data  (memory_write_data),
+    .tx    (uart_tx_out),
+    .busy  (uart_busy)
 );
 
 always @(posedge clk) begin
